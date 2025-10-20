@@ -1,0 +1,19 @@
+{
+	"info": {
+		"_postman_id": "e0c83e43-2f75-4e5f-8532-75a89edc0c5d",
+		"name": "prog3_Restaurante",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49388205",
+		"_collection_link": "https://nataliagomezramos439-96121.postman.co/workspace/Natalia-G%25C3%25B3mez-Ramos's-Workspace~0bc4c685-3099-43a9-8bf5-5ab26cf4e2be/collection/49388205-e0c83e43-2f75-4e5f-8532-75a89edc0c5d?action=share&source=collection_link&creator=49388205"
+	},
+	"item": [
+		{
+			"name": "Comida Rapida",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

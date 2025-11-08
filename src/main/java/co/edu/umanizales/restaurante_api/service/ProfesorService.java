@@ -1,7 +1,7 @@
 package co.edu.umanizales.restaurante_api.service;
 
-import co.edu.umanizales.restaurante_api.model.Profesor;
-import co.edu.umanizales.restaurante_api.repository.ProfesorRepository;
+import co.edu.umanizales.restaurante_api.model.Teacher;
+import co.edu.umanizales.restaurante_api.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,31 +10,31 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProfesorService {
+public class TeacherService {
     
-    private final ProfesorRepository profesorRepository;
+    private final TeacherRepository teacherRepository;
 
-    public List<Profesor> findAll() {
-        return profesorRepository.findAll();
+    public List<Teacher> findAll() {
+        return teacherRepository.findAll();
     }
 
-    public Optional<Profesor> findById(Long id) {
-        return profesorRepository.findById(id);
+    public Optional<Teacher> findById(long id) {
+        return teacherRepository.findById(id);
     }
 
-    public Profesor save(Profesor profesor) {
-        return profesorRepository.save(profesor);
+    public Teacher save(Teacher teacher) {
+        return teacherRepository.save(teacher);
     }
 
-    public Profesor update(Long id, Profesor profesor) {
-        if (!profesorRepository.findById(id).isPresent()) {
-            throw new RuntimeException("Profesor no encontrado con id: " + id);
+    public Teacher update(long id, Teacher teacher) {
+        if (!teacherRepository.findById(id).isPresent()) {
+            throw new RuntimeException("Teacher not found with id: " + id);
         }
-        profesor.setId(id);
-        return profesorRepository.save(profesor);
+        teacher.setId(id);
+        return teacherRepository.save(teacher);
     }
 
-    public boolean deleteById(Long id) {
-        return profesorRepository.deleteById(id);
+    public boolean deleteById(long id) {
+        return teacherRepository.deleteById(id);
     }
 }

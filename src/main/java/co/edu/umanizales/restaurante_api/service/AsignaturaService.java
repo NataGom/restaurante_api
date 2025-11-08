@@ -1,7 +1,7 @@
 package co.edu.umanizales.restaurante_api.service;
 
-import co.edu.umanizales.restaurante_api.model.Asignatura;
-import co.edu.umanizales.restaurante_api.repository.AsignaturaRepository;
+import co.edu.umanizales.restaurante_api.model.Subject;
+import co.edu.umanizales.restaurante_api.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,31 +10,31 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AsignaturaService {
+public class SubjectService {
     
-    private final AsignaturaRepository asignaturaRepository;
+    private final SubjectRepository subjectRepository;
 
-    public List<Asignatura> findAll() {
-        return asignaturaRepository.findAll();
+    public List<Subject> findAll() {
+        return subjectRepository.findAll();
     }
 
-    public Optional<Asignatura> findById(Long id) {
-        return asignaturaRepository.findById(id);
+    public Optional<Subject> findById(long id) {
+        return subjectRepository.findById(id);
     }
 
-    public Asignatura save(Asignatura asignatura) {
-        return asignaturaRepository.save(asignatura);
+    public Subject save(Subject subject) {
+        return subjectRepository.save(subject);
     }
 
-    public Asignatura update(Long id, Asignatura asignatura) {
-        if (!asignaturaRepository.findById(id).isPresent()) {
-            throw new RuntimeException("Asignatura no encontrada con id: " + id);
+    public Subject update(long id, Subject subject) {
+        if (!subjectRepository.findById(id).isPresent()) {
+            throw new RuntimeException("Subject not found with id: " + id);
         }
-        asignatura.setId(id);
-        return asignaturaRepository.save(asignatura);
+        subject.setId(id);
+        return subjectRepository.save(subject);
     }
 
-    public boolean deleteById(Long id) {
-        return asignaturaRepository.deleteById(id);
+    public boolean deleteById(long id) {
+        return subjectRepository.deleteById(id);
     }
 }

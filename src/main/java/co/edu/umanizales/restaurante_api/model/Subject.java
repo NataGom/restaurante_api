@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Asignatura {
-    private Long id;
-    private String codigo;
-    private String nombre;
-    private String descripcion;
-    private int creditos;
+public class Subject {
+    private long id;
+    private String code;
+    private String name;
+    private String description;
+    private int credits;
 }

@@ -1,9 +1,9 @@
 package co.edu.umanizales.restaurante_api.service;
 
-import co.edu.umanizales.restaurante_api.model.Curso;
-import co.edu.umanizales.restaurante_api.model.Estudiante;
-import co.edu.umanizales.restaurante_api.model.Matricula;
-import co.edu.umanizales.restaurante_api.repository.MatriculaRepository;
+import co.edu.umanizales.restaurante_api.model.Course;
+import co.edu.umanizales.restaurante_api.model.Student;
+import co.edu.umanizales.restaurante_api.model.Enrollment;
+import co.edu.umanizales.restaurante_api.repository.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,99 +13,99 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MatriculaService {
+public class EnrollmentService {
     
-    private final MatriculaRepository matriculaRepository;
-    private final EstudianteService estudianteService;
-    private final CursoService cursoService;
+    private final EnrollmentRepository enrollmentRepository;
+    private final StudentService studentService;
+    private final CourseService courseService;
 
-    public List<Matricula> findAll() {
-        List<Matricula> matriculas = matriculaRepository.findAll();
-        // Load estudiante and curso for each matricula
-        matriculas.forEach(this::loadRelations);
-        return matriculas;
+    public List<Enrollment> findAll() {
+        List<Enrollment> enrollments = enrollmentRepository.findAll();
+        // Load student and course for each enrollment
+        enrollments.forEach(this::loadRelations);
+        return enrollments;
     }
 
-    public Optional<Matricula> findById(Long id) {
-        Optional<Matricula> matriculaOpt = matriculaRepository.findById(id);
-        matriculaOpt.ifPresent(this::loadRelations);
-        return matriculaOpt;
+    public Optional<Enrollment> findById(long id) {
+        Optional<Enrollment> enrollmentOpt = enrollmentRepository.findById(id);
+        enrollmentOpt.ifPresent(this::loadRelations);
+        return enrollmentOpt;
     }
 
-    private void loadRelations(Matricula matricula) {
-        if (matricula.getEstudiante() != null && matricula.getEstudiante().getId() != null) {
-            estudianteService.findById(matricula.getEstudiante().getId())
-                .ifPresent(matricula::setEstudiante);
+    private void loadRelations(Enrollment enrollment) {
+        if (enrollment.getStudent() != null && enrollment.getStudent().getId() != 0) {
+            studentService.findById(enrollment.getStudent().getId())
+                .ifPresent(enrollment::setStudent);
         }
-        if (matricula.getCurso() != null && matricula.getCurso().getId() != null) {
-            cursoService.findById(matricula.getCurso().getId())
-                .ifPresent(matricula::setCurso);
+        if (enrollment.getCourse() != null && enrollment.getCourse().getId() != 0) {
+            courseService.findById(enrollment.getCourse().getId())
+                .ifPresent(enrollment::setCourse);
         }
     }
 
-    public Matricula save(Matricula matricula) {
-        // Validate estudiante exists
-        if (matricula.getEstudiante() != null && matricula.getEstudiante().getId() != null) {
-            Estudiante estudiante = estudianteService.findById(matricula.getEstudiante().getId())
-                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
-            matricula.setEstudiante(estudiante);
+    public Enrollment save(Enrollment enrollment) {
+        // Validate student exists
+        if (enrollment.getStudent() != null && enrollment.getStudent().getId() != 0) {
+            Student student = studentService.findById(enrollment.getStudent().getId())
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+            enrollment.setStudent(student);
         }
         
-        // Validate curso exists
-        if (matricula.getCurso() != null && matricula.getCurso().getId() != null) {
-            Curso curso = cursoService.findById(matricula.getCurso().getId())
-                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
-            matricula.setCurso(curso);
+        // Validate course exists
+        if (enrollment.getCourse() != null && enrollment.getCourse().getId() != 0) {
+            Course course = courseService.findById(enrollment.getCourse().getId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+            enrollment.setCourse(course);
         }
         
         // Set default values
-        if (matricula.getFechaMatricula() == null) {
-            matricula.setFechaMatricula(LocalDate.now());
+        if (enrollment.getEnrollmentDate() == null) {
+            enrollment.setEnrollmentDate(LocalDate.now());
         }
-        if (matricula.getEstado() == null || matricula.getEstado().isEmpty()) {
-            matricula.setEstado("ACTIVA");
+        if (enrollment.getStatus() == null || enrollment.getStatus().isEmpty()) {
+            enrollment.setStatus("ACTIVE");
         }
         
-        return matriculaRepository.save(matricula);
+        return enrollmentRepository.save(enrollment);
     }
 
-    public Matricula update(Long id, Matricula matricula) {
-        if (!matriculaRepository.findById(id).isPresent()) {
-            throw new RuntimeException("Matricula no encontrada con id: " + id);
+    public Enrollment update(long id, Enrollment enrollment) {
+        if (!enrollmentRepository.findById(id).isPresent()) {
+            throw new RuntimeException("Enrollment not found with id: " + id);
         }
-        matricula.setId(id);
-        return save(matricula);
+        enrollment.setId(id);
+        return save(enrollment);
     }
 
-    public boolean deleteById(Long id) {
-        return matriculaRepository.deleteById(id);
+    public boolean deleteById(long id) {
+        return enrollmentRepository.deleteById(id);
     }
 
-    public List<Matricula> findByEstudianteId(Long estudianteId) {
-        List<Matricula> matriculas = matriculaRepository.findByEstudianteId(estudianteId);
-        matriculas.forEach(this::loadRelations);
-        return matriculas;
+    public List<Enrollment> findByStudentId(long studentId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(studentId);
+        enrollments.forEach(this::loadRelations);
+        return enrollments;
     }
 
-    public List<Matricula> findByCursoId(Long cursoId) {
-        List<Matricula> matriculas = matriculaRepository.findByCursoId(cursoId);
-        matriculas.forEach(this::loadRelations);
-        return matriculas;
+    public List<Enrollment> findByCourseId(long courseId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(courseId);
+        enrollments.forEach(this::loadRelations);
+        return enrollments;
     }
 
-    public Matricula matricularEstudiante(Long estudianteId, Long cursoId, String periodo) {
-        Estudiante estudiante = estudianteService.findById(estudianteId)
-            .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
-        Curso curso = cursoService.findById(cursoId)
-            .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+    public Enrollment enrollStudent(long studentId, long courseId, String period) {
+        Student student = studentService.findById(studentId)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+        Course course = courseService.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        Matricula matricula = new Matricula();
-        matricula.setEstudiante(estudiante);
-        matricula.setCurso(curso);
-        matricula.setPeriodo(periodo);
-        matricula.setFechaMatricula(LocalDate.now());
-        matricula.setEstado("ACTIVA");
+        Enrollment enrollment = new Enrollment();
+        enrollment.setStudent(student);
+        enrollment.setCourse(course);
+        enrollment.setPeriod(period);
+        enrollment.setEnrollmentDate(LocalDate.now());
+        enrollment.setStatus("ACTIVE");
 
-        return matriculaRepository.save(matricula);
+        return enrollmentRepository.save(enrollment);
     }
 }

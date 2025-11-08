@@ -63,12 +63,12 @@ public abstract class CsvRepository<T> {
      */
     public T save(T entity) {
         try {
-            if (getId(entity) == null) {
+            if (getId(entity) == 0) {
                 setId(entity, idGenerator.getAndIncrement());
             }
             
             List<T> entities = findAll();
-            entities.removeIf(e -> Objects.equals(getId(e), getId(entity)));
+            entities.removeIf(e -> getId(e) == getId(entity));
             entities.add(entity);
             
             writeAll(entities);
@@ -103,19 +103,19 @@ public abstract class CsvRepository<T> {
     /**
      * Find entity by ID
      */
-    public Optional<T> findById(Long id) {
+    public Optional<T> findById(long id) {
         return findAll().stream()
-            .filter(entity -> Objects.equals(getId(entity), id))
+            .filter(entity -> getId(entity) == id)
             .findFirst();
     }
 
     /**
      * Delete entity by ID
      */
-    public boolean deleteById(Long id) {
+    public boolean deleteById(long id) {
         try {
             List<T> entities = findAll();
-            boolean removed = entities.removeIf(e -> Objects.equals(getId(e), id));
+            boolean removed = entities.removeIf(e -> getId(e) == id);
             
             if (removed) {
                 writeAll(entities);
@@ -160,12 +160,12 @@ public abstract class CsvRepository<T> {
     /**
      * Get entity ID
      */
-    protected abstract Long getId(T entity);
+    protected abstract long getId(T entity);
 
     /**
      * Set entity ID
      */
-    protected abstract void setId(T entity, Long id);
+    protected abstract void setId(T entity, long id);
 
     /**
      * Escape CSV field

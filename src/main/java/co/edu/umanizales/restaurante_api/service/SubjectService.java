@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +17,7 @@ public class SubjectService {
         return subjectRepository.findAll();
     }
 
-    public Optional<Subject> findById(long id) {
+    public Subject findById(long id) {
         return subjectRepository.findById(id);
     }
 
@@ -27,7 +26,8 @@ public class SubjectService {
     }
 
     public Subject update(long id, Subject subject) {
-        if (!subjectRepository.findById(id).isPresent()) {
+        Subject existing = subjectRepository.findById(id);
+        if (existing == null) {
             throw new RuntimeException("Subject not found with id: " + id);
         }
         subject.setId(id);

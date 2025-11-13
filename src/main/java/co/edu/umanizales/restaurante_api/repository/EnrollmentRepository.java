@@ -3,8 +3,8 @@ package co.edu.umanizales.restaurante_api.repository;
 import co.edu.umanizales.restaurante_api.model.Enrollment;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class EnrollmentRepository extends CsvRepository<Enrollment> {
@@ -67,17 +67,27 @@ public class EnrollmentRepository extends CsvRepository<Enrollment> {
      * Find enrollments by student ID
      */
     public List<Enrollment> findByStudentId(long studentId) {
-        return findAll().stream()
-            .filter(m -> m.getStudent() != null && m.getStudent().getId() == studentId)
-            .collect(Collectors.toList());
+        List<Enrollment> result = new ArrayList<>();
+        List<Enrollment> all = findAll();
+        for (Enrollment m : all) {
+            if (m.getStudent() != null && m.getStudent().getId() == studentId) {
+                result.add(m);
+            }
+        }
+        return result;
     }
 
     /**
      * Find enrollments by course ID
      */
     public List<Enrollment> findByCourseId(long courseId) {
-        return findAll().stream()
-            .filter(m -> m.getCourse() != null && m.getCourse().getId() == courseId)
-            .collect(Collectors.toList());
+        List<Enrollment> result = new ArrayList<>();
+        List<Enrollment> all = findAll();
+        for (Enrollment m : all) {
+            if (m.getCourse() != null && m.getCourse().getId() == courseId) {
+                result.add(m);
+            }
+        }
+        return result;
     }
 }

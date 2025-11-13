@@ -23,9 +23,12 @@ public class TeacherController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Teacher> getTeacherById(@PathVariable long id) {
-        return teacherService.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        Teacher teacher = teacherService.findById(id);
+        if (teacher != null) {
+            return ResponseEntity.ok(teacher);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping

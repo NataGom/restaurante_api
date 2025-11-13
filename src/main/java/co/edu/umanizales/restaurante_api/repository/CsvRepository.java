@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 /**
  * Base repository class for CSV file operations
@@ -46,10 +45,13 @@ public abstract class CsvRepository<T> {
         try {
             List<T> entities = findAll();
             if (!entities.isEmpty()) {
-                long maxId = entities.stream()
-                    .mapToLong(this::getId)
-                    .max()
-                    .orElse(0);
+                long maxId = 0;
+                for (T entity : entities) {
+                    long id = getId(entity);
+                    if (id > maxId) {
+                        maxId = id;
+                    }
+                }
                 idGenerator.set(maxId + 1);
             }
         } catch (Exception e) {
@@ -68,7 +70,13 @@ public abstract class CsvRepository<T> {
             }
             
             List<T> entities = findAll();
-            entities.removeIf(e -> getId(e) == getId(entity));
+            List<T> toRemove = new ArrayList<>();
+            for (T e : entities) {
+                if (getId(e) == getId(entity)) {
+                    toRemove.add(e);
+                }
+            }
+            entities.removeAll(toRemove);
             entities.add(entity);
             
             writeAll(entities);
@@ -88,13 +96,21 @@ public abstract class CsvRepository<T> {
                 return new ArrayList<>();
             }
 
+            List<T> result = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                return reader.lines()
-                    .skip(1) // Skip header
-                    .filter(line -> !line.trim().isEmpty())
-                    .map(this::fromCsv)
-                    .collect(Collectors.toList());
+                String line;
+                boolean isFirstLine = true;
+                while ((line = reader.readLine()) != null) {
+                    if (isFirstLine) {
+                        isFirstLine = false;
+                        continue; // Skip header
+                    }
+                    if (!line.trim().isEmpty()) {
+                        result.add(fromCsv(line));
+                    }
+                }
             }
+            return result;
         } catch (IOException e) {
             throw new RuntimeException("Error reading CSV file", e);
         }
@@ -103,10 +119,14 @@ public abstract class CsvRepository<T> {
     /**
      * Find entity by ID
      */
-    public Optional<T> findById(long id) {
-        return findAll().stream()
-            .filter(entity -> getId(entity) == id)
-            .findFirst();
+    public T findById(long id) {
+        List<T> entities = findAll();
+        for (T entity : entities) {
+            if (getId(entity) == id) {
+                return entity;
+            }
+        }
+        return null;
     }
 
     /**
@@ -115,10 +135,20 @@ public abstract class CsvRepository<T> {
     public boolean deleteById(long id) {
         try {
             List<T> entities = findAll();
-            boolean removed = entities.removeIf(e -> getId(e) == id);
+            T toRemove = null;
+            for (T e : entities) {
+                if (getId(e) == id) {
+                    toRemove = e;
+                    break;
+                }
+            }
             
-            if (removed) {
-                writeAll(entities);
+            boolean removed = false;
+            if (toRemove != null) {
+                removed = entities.remove(toRemove);
+                if (removed) {
+                    writeAll(entities);
+                }
             }
             
             return removed;

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/enrollments")
+@RequestMapping("/api/tuition")
 @RequiredArgsConstructor
 public class TuitionController {
     
@@ -24,9 +24,12 @@ public class TuitionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable long id) {
-        return enrollmentService.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        Enrollment enrollment = enrollmentService.findById(id);
+        if (enrollment != null) {
+            return ResponseEntity.ok(enrollment);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/student/{studentId}")

@@ -24,9 +24,12 @@ public class EnrollmentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable long id) {
-        return enrollmentService.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        Enrollment enrollment = enrollmentService.findById(id);
+        if (enrollment != null) {
+            return ResponseEntity.ok(enrollment);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/student/{studentId}")

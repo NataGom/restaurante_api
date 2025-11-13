@@ -25,6 +25,9 @@ public class Course {
     
     // Aggregation: a course can have multiple students
     private List<Student> students = new ArrayList<>();
+    
+    // Aggregation: a course can have one or multiple schedules
+    private List<Schedule> schedules = new ArrayList<>();
 
     /**
      * Adds a subject to the course
@@ -55,5 +58,24 @@ public class Course {
         if (!students.contains(student)) {
             students.add(student);
         }
+    }
+    
+    /**
+     * Adds a schedule to the course
+     */
+    public void addSchedule(Schedule schedule) {
+        if (schedules == null) {
+            schedules = new ArrayList<>();
+        }
+        if (!schedules.contains(schedule)) {
+            schedules.add(schedule);
+        }
+    }
+    
+    /**
+     * Lists all schedules for the course
+     */
+    public List<Schedule> listSchedules() {
+        return schedules != null ? new ArrayList<>(schedules) : new ArrayList<>();
     }
 }

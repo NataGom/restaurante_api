@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/enrollments")
 @RequiredArgsConstructor
-public class EnrollmentController {
+public class TuitionController {
     
     private final EnrollmentService enrollmentService;
 
@@ -54,9 +54,8 @@ public class EnrollmentController {
         try {
             long studentId = Long.parseLong(request.get("studentId").toString());
             long courseId = Long.parseLong(request.get("courseId").toString());
-            String period = request.get("period").toString();
             
-            Enrollment enrollment = enrollmentService.enrollStudent(studentId, courseId, period);
+            Enrollment enrollment = enrollmentService.enrollStudent(studentId, courseId);
             return ResponseEntity.status(HttpStatus.CREATED).body(enrollment);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);

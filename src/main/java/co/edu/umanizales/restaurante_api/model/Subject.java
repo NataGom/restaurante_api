@@ -13,4 +13,17 @@ public class Subject {
     private String name;
     private String description;
     private int credits;
+    
+    /**
+     * Gets formatted information about the subject
+     * @return formatted string with subject details
+     */
+    public String getInformation() {
+        return String.format("%s - %s: %s (Credits: %d)",
+                code != null ? code : "N/A",
+                name != null ? name : "N/A",
+                description != null ? description : "No description",
+                credits
+        );
+    }
 }

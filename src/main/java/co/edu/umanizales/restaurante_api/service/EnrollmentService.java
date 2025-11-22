@@ -19,11 +19,38 @@ public class EnrollmentService {
     private final CourseService courseService;
 
     public List<Enrollment> findAll() {
-        return enrollmentRepository.findAll();
+        List<Enrollment> enrollments = enrollmentRepository.findAll();
+        // Resolve student and course for each enrollment
+        for (Enrollment enrollment : enrollments) {
+            resolveEnrollmentRelations(enrollment);
+        }
+        return enrollments;
     }
 
     public Enrollment findById(long id) {
-        return enrollmentRepository.findById(id);
+        Enrollment enrollment = enrollmentRepository.findById(id);
+        if (enrollment != null) {
+            resolveEnrollmentRelations(enrollment);
+        }
+        return enrollment;
+    }
+    
+    /**
+     * Resolve student and course objects from their IDs
+     */
+    private void resolveEnrollmentRelations(Enrollment enrollment) {
+        if (enrollment.getStudent() != null && enrollment.getStudent().getId() != 0) {
+            Student student = studentService.findById(enrollment.getStudent().getId());
+            if (student != null) {
+                enrollment.setStudent(student);
+            }
+        }
+        if (enrollment.getCourse() != null && enrollment.getCourse().getId() != 0) {
+            Course course = courseService.findById(enrollment.getCourse().getId());
+            if (course != null) {
+                enrollment.setCourse(course);
+            }
+        }
     }
 
     // With record, relations are referenced by IDs; validation happens on creation/update
@@ -78,11 +105,21 @@ public class EnrollmentService {
     }
 
     public List<Enrollment> findByStudentId(long studentId) {
-        return enrollmentRepository.findByStudentId(studentId);
+        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(studentId);
+        // Resolve student and course for each enrollment
+        for (Enrollment enrollment : enrollments) {
+            resolveEnrollmentRelations(enrollment);
+        }
+        return enrollments;
     }
 
     public List<Enrollment> findByCourseId(long courseId) {
-        return enrollmentRepository.findByCourseId(courseId);
+        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(courseId);
+        // Resolve student and course for each enrollment
+        for (Enrollment enrollment : enrollments) {
+            resolveEnrollmentRelations(enrollment);
+        }
+        return enrollments;
     }
 
     public Enrollment enrollStudent(long studentId, long courseId) {

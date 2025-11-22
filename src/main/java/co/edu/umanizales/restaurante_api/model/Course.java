@@ -15,6 +15,7 @@ public class Course {
     private String code;
     private String name;
     private int credits;
+    private int semester;
     private Mode mode;
     
     // Composition: a course always requires a teacher

@@ -1,6 +1,8 @@
 package co.edu.umanizales.restaurante_api.repository;
 
 import co.edu.umanizales.restaurante_api.model.Enrollment;
+import co.edu.umanizales.restaurante_api.model.Student;
+import co.edu.umanizales.restaurante_api.model.Course;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,7 +44,21 @@ public class EnrollmentRepository extends CsvRepository<Enrollment> {
         Enrollment enrollment = new Enrollment();
         enrollment.setId(Long.parseLong(fields[0]));
         
-        // IDs will be resolved in service layer
+        // Load student ID and create placeholder
+        if (!fields[1].isEmpty()) {
+            long studentId = Long.parseLong(fields[1]);
+            Student student = new Student();
+            student.setId(studentId);
+            enrollment.setStudent(student);
+        }
+        
+        // Load course ID and create placeholder
+        if (!fields[2].isEmpty()) {
+            long courseId = Long.parseLong(fields[2]);
+            Course course = new Course();
+            course.setId(courseId);
+            enrollment.setCourse(course);
+        }
         
         if (!fields[3].isEmpty()) {
             enrollment.setEnrollmentDate(LocalDate.parse(fields[3]));

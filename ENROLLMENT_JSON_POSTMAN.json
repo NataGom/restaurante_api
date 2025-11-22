@@ -1,0 +1,11 @@
+{
+  "student": {
+    "id": 2
+  },
+  "course": {
+    "id": 1
+  },
+  "enrollmentDate": "2024-11-21",
+  "status": "ACTIVE",
+  "period": "2024-1"
+}

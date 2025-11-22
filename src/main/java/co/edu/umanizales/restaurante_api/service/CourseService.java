@@ -55,7 +55,15 @@ public class CourseService {
             }
             course.setTeacher(teacher);
         }
-        return courseRepository.save(course);
+        Course saved = courseRepository.save(course);
+        // Resolve teacher after saving
+        if (saved.getTeacher() != null && saved.getTeacher().getId() != 0) {
+            Teacher teacher = teacherService.findById(saved.getTeacher().getId());
+            if (teacher != null) {
+                saved.setTeacher(teacher);
+            }
+        }
+        return saved;
     }
 
     public Course update(long id, Course course) {

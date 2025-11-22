@@ -1,1 +1,7 @@
 id,name,email,phone,studentId,major,semester
+2,Juan Pérez,juan@example.com,1234567890,20230001,Ingeniería de Sistemas,5
+3,sebastian jaramillo,sj@example.com,1234598890,20230002,Ingeniería de Sistemas,5
+4,karen lopez,kl@example.com,1234593490,20230003,Ingeniería de Sistemas,5
+5,valentina ochoa,vo@example.com,1234590990,20230004,Ingeniería de Sistemas,5
+6,salome ocampo,so@example.com,1245590990,20230005,Ingeniería de Sistemas,5
+7,Juan Perez,juan@example.com,3001234567,2024001,Ingenieria de Sistemas,3

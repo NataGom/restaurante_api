@@ -1,1 +1,7 @@
-id,code,name,credits,mode,teacherId
+id,code,name,credits,semester,mode,teacherId
+1,MATH101,Curso de Matematicas 101,3,1,Online,1
+2,Englesh204,Curso de ingles 204,3,2,Online,2
+3,Soc203,Curso de sociales 103,2,4,Online,3
+4,Arts105 ,Curso de artes 103,2,1,on_site,4
+7,Music103 ,Curso de Musica 103,3,3,on_site,5,
+

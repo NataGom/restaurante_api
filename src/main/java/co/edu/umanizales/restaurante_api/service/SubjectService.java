@@ -14,7 +14,8 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
 
     public List<Subject> findAll() {
-        return subjectRepository.findAll();
+        List<Subject> subjects = subjectRepository.findAll();
+        return subjects;
     }
 
     public Subject findById(long id) {
@@ -22,7 +23,9 @@ public class SubjectService {
     }
 
     public Subject save(Subject subject) {
-        return subjectRepository.save(subject);
+        Subject saved = subjectRepository.save(subject);
+        // Ensure the saved subject is returned with all data
+        return findById(saved.getId());
     }
 
     public Subject update(long id, Subject subject) {
